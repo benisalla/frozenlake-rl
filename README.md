@@ -18,6 +18,35 @@ This is the tabular / dynamic-programming companion of my other RL repositories 
 LunarLander, MountainCar, Pendulum, Pong): the problems here are small enough that the exact
 optimum is known, so every method can be checked against it instead of against a guess.
 
+## Before and after training
+
+Same seed on both sides: a random agent next to a trained one (rendered with gymnasium's
+`rgb_array` mode; orange dots mark the cells visited). Regenerate with `python scripts/make_gifs.py`.
+
+**FrozenLake 8x8, slippery**: random actions fall into a hole within a few steps; the Q-learning
+policy (85 % success) zig-zags away from the holes, because on slippery ice a move can only slip
+sideways, never backwards.
+
+![frozenlake 8x8 slippery: random vs trained](assets/gifs/frozenlake-8x8-slippery.gif)
+
+**Taxi**: random actions wander for 200 steps without delivering anyone (return -911 in this episode, illegal pick-ups and drop-offs cost -10 each);
+the trained taxi drives to the passenger, picks them up and drops them at the hotel.
+
+![taxi: random vs trained](assets/gifs/taxi.gif)
+
+**CliffWalking, both trained with epsilon = 0.1**: SARSA learns the value of the policy it
+actually follows, exploration included, so it keeps away from the cliff (-17); Q-learning learns
+the greedy values and takes the shortest path along the edge (-13), which its exploring agent
+pays for during training.
+
+![cliffwalking: SARSA vs Q-learning](assets/gifs/cliffwalking.gif)
+
+**How the solution appears**: value iteration on the 8x8 slippery lake, sweep by sweep. The
+goal's value spreads backwards one step per sweep and the greedy arrows settle once the values
+reach the start.
+
+![value iteration sweeps](assets/gifs/value_iteration.gif)
+
 ```mermaid
 flowchart LR
     P["model P(s', r | s, a)"] --> DP["dynamic programming<br/>value / policy iteration"]
@@ -287,6 +316,7 @@ src/frozenlake_rl/
   play.py          `frozenlake-play` (terminal or GIF)
   viz.py           value heatmaps, policy arrows, Q tables, curves
 scripts/compare_all.py   the runs behind the results above -> assets/
+scripts/make_gifs.py     the before/after GIFs and the value-iteration animation -> assets/gifs/
 examples/        six numbered scripts
 tests/           40 tests, ~45 s on one CPU
 docs/            architecture, environment, training, evaluation, testing

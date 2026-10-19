@@ -82,3 +82,12 @@ files (`agent.npz`, `summary.json`, `history.json`, `run.png`) are written to `r
 One seed per run: seed-to-seed variation was not measured, so on the slippery lakes differences of
 a few hundredths between methods in the tables should not be read as meaningful. The notebook runs
 the same comparison with larger budgets (`EPISODES_SCALE`).
+
+## Animations
+
+`python scripts/make_gifs.py` (about 2 minutes) trains the agents it needs and writes
+`assets/gifs/`: random vs trained Q-learning on the 8x8 slippery lake and on Taxi (same seed,
+the first seed where the trained agent succeeds), SARSA vs Q-learning on CliffWalking, and
+value iteration's V(s) and greedy arrows on the 8x8 slippery lake sweep by sweep. Frames come
+from gymnasium's `rgb_array` renderer; the visited cells are drawn as dots, and each GIF stays
+well under 2 MB. `frozenlake-play <run> --gif out.gif` renders a single saved policy the same way.
