@@ -1,0 +1,14 @@
+data/
+checkpoints/
+examples/output/
+runs/
+.venv/
+*.pt
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.ipynb_checkpoints/

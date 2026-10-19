@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "frozenlake-rl"
+version = "0.1.0"
+description = "FrozenLake, Taxi and CliffWalking solved with every classical RL method: value and policy iteration, Monte Carlo control, SARSA, expected SARSA, Q-learning, double Q-learning, n-step SARSA, eligibility traces, Dyna-Q, plus DQN and REINFORCE on one-hot states, compared with the same evaluation, heatmaps and curves."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+keywords = [
+  "reinforcement-learning", "frozenlake", "taxi", "cliffwalking", "gymnasium", "q-learning", "sarsa",
+  "dynamic-programming", "value-iteration", "policy-iteration", "monte-carlo", "temporal-difference",
+  "eligibility-traces", "dyna-q", "dqn", "reinforce", "tabular-rl", "educational",
+]
+dependencies = [
+  "numpy>=1.24",
+  "gymnasium[toy-text]>=1.0",
+  "matplotlib>=3.7",
+  "torch>=2.4",
+]
+
+[project.scripts]
+frozenlake-train = "frozenlake_rl.train:main"
+frozenlake-play = "frozenlake_rl.play:main"
+frozenlake-eval = "frozenlake_rl.evaluate:main"
+frozenlake-compare = "frozenlake_rl.compare:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.9", "nbformat>=5.10"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/frozenlake_rl"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = ["notebooks/*.ipynb"]  # generated from src/ by notebooks/build_notebook.py
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B023"]  # the policy lambdas passed to Tracker are called inside the same loop iteration
